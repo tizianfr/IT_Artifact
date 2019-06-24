@@ -1,4 +1,7 @@
 function plot_days(app, days_DD, days_BB)
+
+flag_3dfigure = 0;
+
 year1 = app.firstyear.Value;
 year2 = app.lastyear.Value;
 
@@ -12,7 +15,9 @@ scatter(app.UIAxes2, days_BB(:,end), days_BB(:,end-2), 'x');
 
 
 figure(1);clf
-figure(2);clf
+if flag_3dfigure
+    figure(2);clf
+end
 kk = 1;
 for year = year1:year2
     mask_dd = days_DD(:,1) == year;
@@ -34,9 +39,11 @@ for year = year1:year2
     xx2(:,2) = days_BB(mask_bb,end-3);
     xx2(:,3) = days_BB(mask_bb,end-2);
     xx = vertcat(xx, xx2);
-    figure(2); hold on
-    plot3(xx(:,1), xx(:,2), xx(:,3),'.','MarkerSize', 13);
-    %%
+    
+    if flag_3dfigure
+        figure(2); hold on
+        plot3(xx(:,1), xx(:,2), xx(:,3),'.','MarkerSize', 13);
+    end
 
     clear xx xx2 x x2 mask_dd mask_bb 
     legend_years(kk,1) = year;
@@ -44,7 +51,7 @@ for year = year1:year2
 end
 clear kk year
 
-figure(1); hold on
+f1 = figure(1); hold on
 plot(ones(366,1)*max(max(days_DD(:,end-2:end-1))));
 plot(ones(366,1)*min(min(days_BB(:,end-2:end-1))));
 % title('Extreme weather situations: distribution and intensity');
@@ -55,11 +62,15 @@ legend(legend_years);
 xlim([0 370])
 clear legend_years
 set(gca, 'XMinorGrid', 'on', 'YMinorGrid', 'on', 'XGrid', 'on');
-set(gcf, 'Position', [450 450 400 300]);
+set(gcf, 'Position', [50 450 550 300]);
 
-figure(2);
-view(50,10)
-set(gca, 'XMinorGrid', 'on', 'YMinorGrid', 'on', 'XGrid', 'on');
-set(gcf, 'Position', [450 450 400 300]);
+if flag_3dfigure
+    figure(2);
+    view(50,10)
+    set(gca, 'XMinorGrid', 'on', 'YMinorGrid', 'on', 'XGrid', 'on');
+    set(gcf, 'Position', [450 450 400 300]);
+end
+
+clear f1
 end
 

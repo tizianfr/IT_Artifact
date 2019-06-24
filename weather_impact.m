@@ -7,7 +7,7 @@ year2 = input.lastyear.Value;
 impact_var = load([input.path, input.dependent.Text]);
 [~, input.dependent.Text, ~] = fileparts(input.dependent.Text);
 impact_var = impact_var.(input.dependent.Text);
-clear input
+
 %% resize variable 
 % exclude rows that are not included in the considered period
 impact_var(not(impact_var(:,1)>=year1 & impact_var(:,1) <= year2), :) = [];
@@ -51,9 +51,10 @@ end
 clear a
 %% Check impact of explanatory variable on dependent variable
 % compare each extreme sample (s1, s3) with non-extreme sample (s2)
-impact_DD.impact_var = hypothesis_tests(s1, s2, size(s1,2));
-impact_BB.impact_var = hypothesis_tests(s3, s2, size(s3,2));
+impact_DD.(input.dependent.Text) = hypothesis_tests(s1, s2, size(s1,2));
+impact_BB.(input.dependent.Text) = hypothesis_tests(s3, s2, size(s3,2));
 
+clear input
 clear impact_var s1 s2 s3
 %% load variables
 % IMPACT VARIABLES
